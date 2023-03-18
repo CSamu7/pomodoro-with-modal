@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   formatNumber,
-  getFutureTime,
   milisecondsToMinutes,
   milisecondsToSeconds,
 } from "../helpers/time";
@@ -20,19 +19,19 @@ export default function (props) {
 
     const timer = () => {
       setTime((prevTime) => {
-        if (time <= 0) return 0;
+        if (prevTime <= 999) return 0;
 
         const now = Date.now();
-
-        const internal = now - referenceTime;
+        const newInterval = now - referenceTime;
         setReferenceTime(now);
-        return prevTime - internal;
+        return prevTime - newInterval;
       });
     };
 
     const setTimer = setTimeout(timer, interval);
     return () => clearTimeout(setTimer);
   }, [time]);
+
   const MINUTES = formatNumber(milisecondsToMinutes(time));
   const SECONDS = formatNumber(milisecondsToSeconds(time));
 

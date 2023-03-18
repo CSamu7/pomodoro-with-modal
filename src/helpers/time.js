@@ -1,9 +1,3 @@
-const getFutureTime = (minutes) => {
-  const newTime = new Date();
-  newTime.setMinutes(newTime.getMinutes() + minutes);
-  return newTime;
-}
-
 const milisecondsToMinutes = (miliseconds) => {
   return Math.floor(miliseconds / 1000 / 60);
 }
