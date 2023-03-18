@@ -9,7 +9,7 @@ const milisecondsToMinutes = (miliseconds) => {
 }
 
 const milisecondsToSeconds = (miliseconds) => {
-  return Math.floor((miliseconds / 1000) % 60);
+  return (miliseconds / 1000 % 60).toFixed(0);
 }
 
 const formatNumber = (number) => {
