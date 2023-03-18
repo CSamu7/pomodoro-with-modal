@@ -21,15 +21,16 @@ export default function (props) {
     let expectTime = Date.now() + interval;
 
     const timer = () => {
-      let lostTime = Date.now() - expectTime;
+      let wasteTime = futureTime.getTime() - actualTime.getTime();
+      setTime(wasteTime);
 
       expectTime += interval;
-      setTimeout(timer, Math.max(0, interval - lostTime));
+      setTimeout(timer, Math.max(0, interval - wasteTime));
     };
 
-    setTimeout(timer, interval);
-
-    return () => clearInterval(timer);
+    const setTimer = setTimeout(timer, interval);
+    console.log("NO");
+    return () => clearTimeout(setTimer);
   });
 
   const MINUTES = formatNumber(milisecondsToMinutes(time));
