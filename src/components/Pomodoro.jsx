@@ -17,28 +17,17 @@ export default function (props) {
   const actualTime = new Date();
 
   useEffect(() => {
-    let startTime = new Date().getTime();
     const interval = 1000;
-    let steps = 0;
-    let acc = 0;
+    let expectTime = Date.now() + interval;
 
-    const getLoseTime = () => {
-      return new Date().getTime() - startTime - interval;
+    const timer = () => {
+      let lostTime = Date.now() - expectTime;
+
+      expectTime += interval;
+      setTimeout(timer, Math.max(0, interval - lostTime));
     };
 
-    const timer = setInterval(() => {
-      const timeLeft = futureTime.getTime() - actualTime.getTime();
-      steps++;
-
-      if (steps === 10) {
-      }
-
-      if (timeLeft <= 0) clearInterval(timer);
-
-      acc += getLoseTime();
-
-      setTime(timeLeft);
-    }, interval);
+    setTimeout(timer, interval);
 
     return () => clearInterval(timer);
   });
