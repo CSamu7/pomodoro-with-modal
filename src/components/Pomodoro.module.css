@@ -1,0 +1,15 @@
+.pomodoro{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pomodoroTitle{
+  margin: 0;
+}
+
+.pomodoroTime{
+  text-align: center;
+  font-size: 3rem;
+  margin: 0;
+}
