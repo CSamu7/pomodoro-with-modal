@@ -6,7 +6,7 @@ import Pomodoro from "./components/Pomodoro";
 function App() {
   return (
     <div className="App">
-      <Pomodoro></Pomodoro>
+      <Pomodoro initialTime={1} title="Pomodoro"></Pomodoro>
     </div>
   );
 }
