@@ -1,52 +1,62 @@
 import { useEffect, useState } from "react";
+import {
+  formatNumber,
+  getFutureTime,
+  milisecondsToMinutes,
+  milisecondsToSeconds,
+} from "../helpers/time";
+import styles from "./Pomodoro.module.css";
 
-export default function () {
-  const [futureTime, setFutureTime] = useState(new Date());
-  const [timestamp, setTimeStamp] = useState();
-
-  const getFutureDate = (minutes) => {
-    const fTime = new Date();
-    fTime.setMinutes(fTime.getMinutes() + minutes);
-    return fTime;
-  };
-
-  useEffect(() => {
-    const CHOOSE_TIME = 1;
-    const future = getFutureDate(CHOOSE_TIME);
-
-    setFutureTime(future);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const today = new Date();
-      const timeLeft = futureTime.getTime() - today.getTime();
-
-      if (timeLeft < 0) return;
-
-      setTimeStamp((prevTimeLeft) => timeLeft);
-    }, 1000);
-
-    return () => clearInterval(interval);
+export default function (props) {
+  let { title, initialTime } = props;
+  const [time, setTime] = useState();
+  const [futureTime, setFutureTime] = useState(() => {
+    return getFutureTime(initialTime);
   });
 
-  const minutes = Math.floor(timestamp / 1000 / 60);
-  const seconds = Math.floor((timestamp / 1000) % 60);
+  const actualTime = new Date();
+
+  useEffect(() => {
+    let startTime = new Date().getTime();
+    const interval = 1000;
+    let steps = 0;
+    let acc = 0;
+
+    const getLoseTime = () => {
+      return new Date().getTime() - startTime - interval;
+    };
+
+    const timer = setInterval(() => {
+      const timeLeft = futureTime.getTime() - actualTime.getTime();
+      steps++;
+
+      if (steps === 10) {
+      }
+
+      if (timeLeft <= 0) clearInterval(timer);
+
+      acc += getLoseTime();
+
+      setTime(timeLeft);
+    }, interval);
+
+    return () => clearInterval(timer);
+  });
+
+  const MINUTES = formatNumber(milisecondsToMinutes(time));
+  const SECONDS = formatNumber(milisecondsToSeconds(time));
 
   return (
-    <>
-      <h1>Pomodoro</h1>
-      <p>
-        {isNaN(timestamp)
-          ? "Cargando"
-          : minutes.toString().length === 1
-          ? `0${minutes}`
-          : minutes}
-        {seconds.toString().length === 1 ? `0${seconds}` : seconds}
+    <div className={styles.pomodoro}>
+      <h1 className={styles.pomodoroTitle}>{title}</h1>
+      <p id="time" className={styles.pomodoroTime}>
+        {isNaN(MINUTES) || isNaN(SECONDS)
+          ? `Cargando contador...`
+          : `${MINUTES} : ${SECONDS}`}
       </p>
       <button>Iniciar</button>
       <button>Editar</button>
       <button>Detener</button>
-    </>
+    </div>
   );
 }
