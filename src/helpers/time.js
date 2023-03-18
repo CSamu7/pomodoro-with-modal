@@ -1,15 +1,9 @@
-const getFutureTime = (minutes) => {
-  const newTime = new Date();
-  newTime.setMinutes(newTime.getMinutes() + minutes);
-  return newTime;
-}
-
 const milisecondsToMinutes = (miliseconds) => {
   return Math.floor(miliseconds / 1000 / 60);
 }
 
 const milisecondsToSeconds = (miliseconds) => {
-  return Math.floor((miliseconds / 1000) % 60);
+  return (miliseconds / 1000 % 60).toFixed(0);
 }
 
 const formatNumber = (number) => {
