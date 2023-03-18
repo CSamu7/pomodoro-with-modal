@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   formatNumber,
   getFutureTime,
@@ -9,30 +9,30 @@ import styles from "./Pomodoro.module.css";
 
 export default function (props) {
   let { title, initialTime } = props;
-  const [time, setTime] = useState();
-  const [futureTime, setFutureTime] = useState(() => {
-    return getFutureTime(initialTime);
-  });
 
-  const actualTime = new Date();
+  const TIME_IN_MILISECONDS = initialTime * 60 * 1000;
+
+  const [time, setTime] = useState(TIME_IN_MILISECONDS);
+  const [referenceTime, setReferenceTime] = useState(Date.now());
 
   useEffect(() => {
     const interval = 1000;
-    let expectTime = Date.now() + interval;
 
     const timer = () => {
-      let wasteTime = futureTime.getTime() - actualTime.getTime();
-      setTime(wasteTime);
+      setTime((prevTime) => {
+        if (time <= 0) return 0;
 
-      expectTime += interval;
-      setTimeout(timer, Math.max(0, interval - wasteTime));
+        const now = Date.now();
+
+        const internal = now - referenceTime;
+        setReferenceTime(now);
+        return prevTime - internal;
+      });
     };
 
     const setTimer = setTimeout(timer, interval);
-    console.log("NO");
     return () => clearTimeout(setTimer);
-  });
-
+  }, [time]);
   const MINUTES = formatNumber(milisecondsToMinutes(time));
   const SECONDS = formatNumber(milisecondsToSeconds(time));
 
@@ -40,9 +40,7 @@ export default function (props) {
     <div className={styles.pomodoro}>
       <h1 className={styles.pomodoroTitle}>{title}</h1>
       <p id="time" className={styles.pomodoroTime}>
-        {isNaN(MINUTES) || isNaN(SECONDS)
-          ? `Cargando contador...`
-          : `${MINUTES} : ${SECONDS}`}
+        {`${MINUTES}:${SECONDS}`}
       </p>
       <button>Iniciar</button>
       <button>Editar</button>
