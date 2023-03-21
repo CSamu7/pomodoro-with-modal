@@ -12,4 +12,4 @@ const formatNumber = (number) => {
   return stringNumber.length === 1 ? `0${stringNumber}` : stringNumber
 }
 
-export {getFutureTime, milisecondsToMinutes, milisecondsToSeconds, formatNumber}
+export {milisecondsToMinutes, milisecondsToSeconds, formatNumber}
