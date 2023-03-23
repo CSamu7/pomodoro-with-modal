@@ -3,7 +3,7 @@ import {
   formatNumber,
   milisecondsToMinutes,
   milisecondsToSeconds,
-} from "../helpers/time";
+} from "../../helpers/time";
 import styles from "./Pomodoro.module.css";
 
 export default function (props) {
@@ -41,9 +41,11 @@ export default function (props) {
       <p id="time" className={styles.pomodoroTime}>
         {`${MINUTES}:${SECONDS}`}
       </p>
-      <button>Iniciar</button>
-      <button>Editar</button>
-      <button>Detener</button>
+      <div className={styles.pomodoroPanelButtons}>
+        <button className={styles.btnPomodoro}>Iniciar</button>
+        <button className={styles.btnPomodoro}>Editar</button>
+        <button className={styles.btnPomodoro}>Detener</button>
+      </div>
     </div>
   );
 }
