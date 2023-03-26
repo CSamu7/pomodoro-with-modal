@@ -20,13 +20,25 @@ export default function (props) {
 
   const [time, setTime] = useState(() => getInitialTime())
 
-  const timer = () => {
-    const FUTURE_TIME = Date.now() + initialTime
+  const timer = (futureTime) => {
+    const actualTime = futureTime - Date.now()
 
-    setInterval(() => {
-      const actualTime = FUTURE_TIME - Date.now()
+    setTime(actualTime)
 
-      setTime(actualTime)
+    localStorage.setItem('time', time)
+
+    if (actualTime < 0) return setTime(0)
+
+    setTimeout(() => {
+      timer(futureTime)
+    }, 1000)
+  }
+
+  const handleStart = () => {
+    const FUTURE_TIME = Date.now() + time
+
+    setTimeout(() => {
+      timer(FUTURE_TIME)
     }, 1000)
   }
 
@@ -39,7 +51,9 @@ export default function (props) {
         {`${MINUTES}:${SECONDS}`}
       </p>
       <div className={styles.panelButtons}>
-        <button className={styles.btnPomodoro}>Iniciar</button>
+        <button className={styles.btnPomodoro} onClick={handleStart}>
+          Iniciar
+        </button>
         <button className={styles.btnPomodoro}>Editar</button>
         <button className={styles.btnPomodoro}>Detener</button>
       </div>
