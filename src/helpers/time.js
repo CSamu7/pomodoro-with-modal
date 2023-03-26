@@ -12,4 +12,8 @@ const formatNumber = (number) => {
   return stringNumber.length === 1 ? `0${stringNumber}` : stringNumber
 }
 
-export {getFutureTime, milisecondsToMinutes, milisecondsToSeconds, formatNumber}
+const minutesToMiliseconds = (minutes) => {
+  return minutes * 60 * 1000
+}
+
+export { milisecondsToMinutes, milisecondsToSeconds, formatNumber, minutesToMiliseconds}

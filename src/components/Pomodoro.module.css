@@ -1,7 +1,10 @@
 .pomodoro{
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
   flex-direction: column;
+  height: 200px;
+  width: 350px;
 }
 
 .pomodoroTitle{
@@ -12,4 +15,25 @@
   text-align: center;
   font-size: 3rem;
   margin: 0;
+}
+
+.panelButtons{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btnPomodoro{
+  background-color: #333;
+  border: 0;
+
+  width: 90px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btnPomodoro:hover{
+  background-color: #444;
+
 }

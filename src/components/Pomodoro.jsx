@@ -1,49 +1,73 @@
-import { useEffect, useMemo, useState } from "react";
+import { useRef, useState } from 'react'
 import {
   formatNumber,
   milisecondsToMinutes,
   milisecondsToSeconds,
-} from "../helpers/time";
-import styles from "./Pomodoro.module.css";
+  minutesToMiliseconds,
+} from '../helpers/time'
+import styles from './Pomodoro.module.css'
 
 export default function (props) {
-  let { title, initialTime } = props;
+  let { title, initialTime } = props
 
-  const TIME_IN_MILISECONDS = initialTime * 60 * 1000;
+  const getInitialTime = () => {
+    const saveTime = localStorage.getItem('time')
 
-  const [time, setTime] = useState(TIME_IN_MILISECONDS);
-  const [referenceTime, setReferenceTime] = useState(Date.now());
+    if (!saveTime) return localStorage.getItem('item')
 
-  useEffect(() => {
-    const interval = 1000;
+    return minutesToMiliseconds(initialTime)
+  }
 
-    const timer = () => {
-      setTime((prevTime) => {
-        if (prevTime <= 999) return 0;
+  const [time, setTime] = useState(() => getInitialTime())
+  let intervalID
 
-        const now = Date.now();
-        const newInterval = now - referenceTime;
-        setReferenceTime(now);
-        return prevTime - newInterval;
-      });
-    };
+  const alarm = useRef(new Audio('./hotel.mp3'))
+  alarm.current.loop = false
 
-    const setTimer = setTimeout(timer, interval);
-    return () => clearTimeout(setTimer);
-  }, [time]);
+  const timer = () => {
+    const FUTURE_TIME = Date.now() + minutesToMiliseconds(initialTime) //Consigue el tiempo
 
-  const MINUTES = formatNumber(milisecondsToMinutes(time));
-  const SECONDS = formatNumber(milisecondsToSeconds(time));
+    intervalID = setInterval(() => {
+      const actualTime = FUTURE_TIME - Date.now() //Temporizador
+
+      setTime(actualTime)
+
+      if (actualTime < 999) {
+        setTime(0)
+        alarm.current.play()
+        localStorage.removeItem('time')
+        clearInterval(intervalID)
+      }
+    }, 1000)
+  }
+
+  localStorage.setItem('time', time)
+
+  const handleStop = () => {
+    clearInterval(intervalID)
+    alarm.current.pause()
+    alarm.current.currentTime = 0
+  }
+
+  const MINUTES = formatNumber(milisecondsToMinutes(time))
+  const SECONDS = formatNumber(milisecondsToSeconds(time))
 
   return (
     <div className={styles.pomodoro}>
       <h1 className={styles.pomodoroTitle}>{title}</h1>
-      <p id="time" className={styles.pomodoroTime}>
+      <p id='time' className={styles.pomodoroTime}>
         {`${MINUTES}:${SECONDS}`}
       </p>
-      <button>Iniciar</button>
-      <button>Editar</button>
-      <button>Detener</button>
+      <div className={styles.panelButtons}>
+        <button className={styles.btnPomodoro} onClick={timer}>
+          Iniciar
+        </button>
+        <button className={styles.btnPomodoro}>Editar</button>
+        <button className={styles.btnPomodoro} onClick={handleStop}>
+          Detener
+        </button>
+        <button className={styles.btnPomodoro}>Limpiar</button>
+      </div>
     </div>
-  );
+  )
 }

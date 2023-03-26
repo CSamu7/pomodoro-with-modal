@@ -1,14 +1,16 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
-import Pomodoro from "./components/Pomodoro";
+import './App.css'
+import Header from './components/Header'
+import Pomodoro from './components/Pomodoro'
 
 function App() {
   return (
-    <div className="App">
-      <Pomodoro initialTime={1} title="Pomodoro"></Pomodoro>
+    <div className='App'>
+      <Header title='Pomodoro v. 1.0'></Header>
+      <main className='wrapper'>
+        <Pomodoro initialTime={0.1}></Pomodoro>
+      </main>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
