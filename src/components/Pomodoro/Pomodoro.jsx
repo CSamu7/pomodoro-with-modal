@@ -11,7 +11,7 @@ export default function (props) {
   let { initialTime } = props
 
   const getInitialTime = () => {
-    const isTimeInLocalStorage = localStorage.getItem('item')
+    const isTimeInLocalStorage = localStorage.getItem('time')
 
     if (isTimeInLocalStorage) return isTimeInLocalStorage
 
@@ -25,9 +25,12 @@ export default function (props) {
 
     setTime(actualTime)
 
-    localStorage.setItem('time', time)
+    localStorage.setItem('time', actualTime)
 
-    if (actualTime < 0) return setTime(0)
+    if (actualTime < 0) {
+      localStorage.removeItem('time')
+      return setTime(0)
+    }
 
     setTimeout(() => {
       timer(futureTime)
@@ -41,6 +44,8 @@ export default function (props) {
       timer(FUTURE_TIME)
     }, 1000)
   }
+
+  console.log(time)
 
   const MINUTES = formatNumber(milisecondsToMinutes(time))
   const SECONDS = formatNumber(milisecondsToSeconds(time))
