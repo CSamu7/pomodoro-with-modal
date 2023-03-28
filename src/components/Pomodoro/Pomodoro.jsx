@@ -8,12 +8,12 @@ import {
 import styles from './Pomodoro.module.css'
 
 export default function (props) {
-  let { initialTime } = props
-
   const getInitialTime = () => {
     const isTimeInLocalStorage = localStorage.getItem('time')
 
-    if (isTimeInLocalStorage) return isTimeInLocalStorage
+    if (isTimeInLocalStorage) return parseInt(isTimeInLocalStorage)
+
+    let { initialTime } = props
 
     return minutesToMiliseconds(initialTime)
   }
@@ -38,14 +38,17 @@ export default function (props) {
   }
 
   const handleStart = () => {
-    const FUTURE_TIME = Date.now() + time
+    const FUTURE_TIME = Date.now() + time // FUTURE_TIME = Date.now() + 2971
+
+    console.log(time)
+    console.log(Date.now())
+    console.log(FUTURE_TIME)
 
     setTimeout(() => {
+      // 2971
       timer(FUTURE_TIME)
     }, 1000)
   }
-
-  console.log(time)
 
   const MINUTES = formatNumber(milisecondsToMinutes(time))
   const SECONDS = formatNumber(milisecondsToSeconds(time))
